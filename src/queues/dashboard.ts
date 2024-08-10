@@ -2,6 +2,7 @@ import { ExpressAdapter } from '@bull-board/express';
 import { createBullBoard } from '@bull-board/api';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { queue as GetCommitsQueue } from './workers/getCommits';
+import { queue as PostToSlackQueue } from './workers/postToSlack';
 import session from 'express-session';
 import { Express } from 'express';
 import passport from 'passport';
@@ -35,7 +36,10 @@ passport.deserializeUser((user: any, cb) => {
 
 passport.use(localStrategy);
 
-const queues = [new BullMQAdapter(GetCommitsQueue)];
+const queues = [
+  new BullMQAdapter(GetCommitsQueue),
+  new BullMQAdapter(PostToSlackQueue),
+];
 
 const createBullDashboardAndAttachRouter = (app: Express) => {
   const adapter = new ExpressAdapter();

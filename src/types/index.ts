@@ -61,7 +61,9 @@ interface GetCommitsJobData extends OperationalSetInput {}
 
 interface PostToSlackJobData {
   slackUrlKey: string;
-  repoUrl: string;
+  owner: string;
+  repo: string;
+  since: SINCE;
   commits: Commit[];
 }
 

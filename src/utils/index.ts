@@ -1,4 +1,4 @@
-import { ApiResponse, HTTP_CODE, SINCE } from '../types';
+import { ApiResponse, Commit, HTTP_CODE, SINCE } from '../types';
 import express from 'express';
 
 const sendStandardResponse = (
@@ -51,4 +51,102 @@ const getSinceTimestamp = (since: SINCE): string => {
   return result.toISOString();
 };
 
-export { sendStandardResponse, snakeCaseToCamelCaseObject, getSinceTimestamp };
+const getSlackBlocks = (
+  owner: string,
+  repo: string,
+  since: SINCE,
+  commits: Commit[],
+) => {
+  const result: any[] = [];
+
+  const headerBlock = {
+    type: 'rich_text',
+    elements: [
+      {
+        type: 'rich_text_section',
+        elements: [
+          {
+            type: 'text',
+            text: getHeaderFromSince(since),
+            style: {
+              bold: true,
+            },
+          },
+        ],
+      },
+    ],
+  };
+
+  const contentBlock = {
+    type: 'rich_text',
+    elements: [
+      {
+        type: 'rich_text_section',
+        elements: [
+          {
+            type: 'link',
+            url: `https://github.com/${owner}/${repo}`,
+            text: `${owner}/${repo}`,
+          },
+        ],
+      },
+    ],
+  };
+
+  const commitListBlock: any = {
+    type: 'rich_text_list',
+    style: 'ordered',
+    indent: 0,
+    border: 0,
+    elements: [],
+  };
+
+  commits.forEach((commit) => {
+    commitListBlock.elements.push({
+      type: 'rich_text_section',
+      elements: [
+        {
+          type: 'link',
+          url: commit.url,
+          text: commit.message,
+        },
+        {
+          type: 'text',
+          text: ' by ',
+        },
+        {
+          type: 'link',
+          url: commit.committer.url,
+          text: commit.committer.name,
+        },
+      ],
+    });
+  });
+
+  contentBlock.elements.push(commitListBlock);
+
+  result.push(headerBlock, contentBlock);
+  return result;
+};
+
+const getHeaderFromSince = (since: SINCE) => {
+  switch (since) {
+    case SINCE.LAST_DAY:
+      return 'What did we get done today?';
+    case SINCE.LAST_WEEK:
+      return 'What did we get done this week?';
+    case SINCE.LAST_MONTH:
+      return 'What did we get done this month?';
+    default: {
+      throw new Error('unsupported type!');
+    }
+  }
+};
+
+export {
+  sendStandardResponse,
+  snakeCaseToCamelCaseObject,
+  getSinceTimestamp,
+  getSlackBlocks,
+  getHeaderFromSince,
+};
