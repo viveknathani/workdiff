@@ -31,7 +31,7 @@ async function bootstrap(app: express.Application) {
     });
   }
 
-  app.get('/api/v1/list', async (req: any, res: any) => {
+  app.get('/', async (req: any, res: any) => {
     try {
       return sendStandardResponse(
         HTTP_CODE.OK,
