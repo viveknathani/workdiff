@@ -18,6 +18,12 @@ enum QUEUE_NAME {
   POST_TO_SLACK = 'POST_TO_SLACK',
 }
 
+enum SINCE {
+  LAST_DAY = 'LAST_DAY',
+  LAST_WEEK = 'LAST_WEEK',
+  LAST_MONTH = 'LAST_MONTH',
+}
+
 interface ApiResponse {
   status: 'success' | 'error';
   data?: any;
@@ -33,11 +39,42 @@ interface HealthCheckResponse {
   canConnectToCache: boolean;
 }
 
+interface Commit {
+  message: string;
+  url: string;
+  committer: {
+    name: string;
+    url: string;
+  };
+}
+
+interface OperationalSetInput {
+  owner: string;
+  repo: string;
+  branch: string;
+  interval: string;
+  since: SINCE;
+  slackUrlKey: string;
+}
+
+interface GetCommitsJobData extends OperationalSetInput {}
+
+interface PostToSlackJobData {
+  slackUrlKey: string;
+  repoUrl: string;
+  commits: Commit[];
+}
+
 export {
   ApiResponse,
   AppState,
+  Commit,
   HealthCheckResponse,
+  OperationalSetInput,
+  GetCommitsJobData,
+  PostToSlackJobData,
   HTTP_CODE,
   SERVER_ENVIRONMENT,
   QUEUE_NAME,
+  SINCE,
 };
