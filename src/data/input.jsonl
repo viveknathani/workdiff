@@ -1,1 +1,2 @@
 {"owner": "sixhuman", "repo": "cnc", "branch": "master", "interval": "30 3 * * 5", "since": "LAST_WEEK", "slackUrlKey": "SLACK_WEBHOOK_URL_SIXHUMAN"}
+{"owner": "sixhuman", "repo": "dex", "branch": "main", "interval": "30 3 * * 5", "since": "LAST_WEEK", "slackUrlKey": "SLACK_WEBHOOK_URL_SIXHUMAN"}
