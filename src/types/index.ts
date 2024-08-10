@@ -57,6 +57,11 @@ interface OperationalSetInput {
   slackUrlKey: string;
 }
 
+interface OperationalSet {
+  keys: Set<string>;
+  data: OperationalSetInput[];
+}
+
 interface GetCommitsJobData extends OperationalSetInput {}
 
 interface PostToSlackJobData {
@@ -75,6 +80,7 @@ export {
   OperationalSetInput,
   GetCommitsJobData,
   PostToSlackJobData,
+  OperationalSet,
   HTTP_CODE,
   SERVER_ENVIRONMENT,
   QUEUE_NAME,

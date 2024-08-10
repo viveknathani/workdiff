@@ -1,4 +1,13 @@
-import { ApiResponse, Commit, HTTP_CODE, SINCE } from '../types';
+import {
+  ApiResponse,
+  Commit,
+  HTTP_CODE,
+  OperationalSet,
+  OperationalSetInput,
+  SINCE,
+} from '../types';
+import fs from 'fs';
+import readline from 'readline';
 import express from 'express';
 
 const sendStandardResponse = (
@@ -143,10 +152,35 @@ const getHeaderFromSince = (since: SINCE) => {
   }
 };
 
+const getOperationalSet = async (filePath: string) => {
+  const result: OperationalSet = {
+    keys: new Set(),
+    data: [],
+  };
+  const fileStream = fs.createReadStream(filePath);
+
+  const rl = readline.createInterface({
+    input: fileStream,
+    crlfDelay: Infinity,
+  });
+
+  for await (const line of rl) {
+    const data = JSON.parse(line) as OperationalSetInput;
+    const key = `${data.owner}/${data.repo}/${data.branch}`;
+    if (!result.keys.has(key)) {
+      result.keys.add(key);
+      result.data.push(data);
+    }
+  }
+
+  return result;
+};
+
 export {
   sendStandardResponse,
   snakeCaseToCamelCaseObject,
   getSinceTimestamp,
   getSlackBlocks,
   getHeaderFromSince,
+  getOperationalSet,
 };

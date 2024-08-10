@@ -8,9 +8,10 @@
   "scripts": {
     "lint": "npx eslint --fix src/",
     "format": "npx prettier --write src/",
-    "build": "yarn lint && yarn format && yarn tsc && yarn copy-files",
+    "build": "yarn lint && yarn format && yarn tsc && yarn copy-files-web && yarn copy-files-data",
     "start": "yarn build && node build/index.js",
-    "copy-files": "npx copyfiles -u 1 \"src/web/**/*\" build/"
+    "copy-files-web": "npx copyfiles -u 1 \"src/web/**/*\" build/",
+    "copy-files-data": "npx copyfiles -u 1 \"src/data/**/*\" build/"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.1",
