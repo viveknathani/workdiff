@@ -10,6 +10,11 @@ const queue = createQueue(queueName);
 
 const worker = createWorker(queueName, async (job: Job) => {
   const data = job.data as PostToSlackJobData;
+
+  if (data.commits.length === 0) {
+    return;
+  }
+
   const blocks = getSlackBlocks(
     data.owner,
     data.repo,
