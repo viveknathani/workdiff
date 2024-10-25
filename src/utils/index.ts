@@ -117,7 +117,7 @@ const getSlackBlocks = (
         {
           type: 'link',
           url: commit.url,
-          text: commit.message,
+          text: commit.message.split('\n')[0],
         },
         {
           type: 'text',
