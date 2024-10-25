@@ -2,6 +2,8 @@
 
 Generate changelogs from github commits and send them to slack, on a daily/weekly/monthly basis!
 
+<img src="SCREENSHOT.png" width="600" height="200"/>
+
 ### add repositories
 
 Repositories to be tracked are stored in [src/data/input.jsonl](./src/data/input.jsonl) file.
